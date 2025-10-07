@@ -1,85 +1,88 @@
-// Fetch driver standings and populate dropdowns
 const driver1Select = document.getElementById('driver1');
 const driver2Select = document.getElementById('driver2');
 const comparisonDiv = document.getElementById('comparison');
 
 let drivers = [];
 
+
 async function fetchDrivers() {
-	try {
-		const res = await fetch('https://f1api.dev/api/current/drivers-championship');
-		const data = await res.json();
-		drivers = data.standings;
-		populateDropdown(driver1Select, drivers);
-		populateDropdown(driver2Select, drivers);
-	} catch (err) {
-		comparisonDiv.innerHTML = '<p style="color:red">Failed to load driver data.</p>';
-	}
+  try {
+    const res = await fetch('https://f1api.dev/api/current/drivers-championship');
+    const data = await res.json();
+    drivers = data.drivers_championship; // correct array name from API
+  } catch (err) {
+    comparisonDiv.innerHTML = '<p style="color:red">Failed to load driver data.</p>';
+  }
 }
 
-function populateDropdown(select, drivers) {
-	drivers.forEach(driver => {
-		const option = document.createElement('option');
-		option.value = driver.driver.code;
-		option.textContent = `${driver.driver.givenName} ${driver.driver.familyName}`;
-		select.appendChild(option);
-	});
+// Find driver by classificationId (from dropdown value)
+function getDriverByClassificationId(id) {
+  return drivers.find(d => String(d.classificationId) === String(id));
 }
 
-function getDriverByCode(code) {
-	return drivers.find(d => d.driver.code === code);
-}
 
 function showComparison() {
-	const code1 = driver1Select.value;
-	const code2 = driver2Select.value;
-	const d1 = getDriverByCode(code1);
-	const d2 = getDriverByCode(code2);
+  const id1 = driver1Select.value;
+  const id2 = driver2Select.value;
+  const d1 = getDriverByClassificationId(id1);
+  const d2 = getDriverByClassificationId(id2);
 
-	if (!d1 && !d2) {
-		comparisonDiv.innerHTML = '';
-		return;
-	}
 
-	let html = '<div class="comparison-table">';
-	html += '<table><thead><tr><th>Stat</th>';
-	if (d1) html += `<th>${d1.driver.givenName} ${d1.driver.familyName}</th>`;
-	if (d2) html += `<th>${d2.driver.givenName} ${d2.driver.familyName}</th>`;
-	html += '</tr></thead><tbody>';
 
-	const stats = [
-		{ label: 'Position', key: 'position' },
-		{ label: 'Points', key: 'points' },
-		{ label: 'Wins', key: 'wins' },
-		{ label: 'Nationality', key: 'nationality', driver: true },
-		{ label: 'Team', key: 'constructor', driver: false }
-	];
+  // Team gradients by teamId
+  const teamGradients = {
+    williams: ['#000681', '#1769DB'],
+    mercedes: ['#017660', '#05D7B6'],
+    alpine: ['#005081', '#00A1E8'],
+    ferrari: ['#710006', '#EE1332'],
+    haas: ['#4E5052', '#9D9FA2'],
+    rb: ['#2345AB', '#6D98FF'],
+    aston_martin: ['#00482C', '#239971'],
+    sauber: ['#016400', '#08C00E'],
+    mclaren: ['#873500', '#F47600'],
+    red_bull: ['#003282', '#4781D7']
+  };
 
-	stats.forEach(stat => {
-		html += `<tr><td>${stat.label}</td>`;
-		if (d1) {
-			if (stat.key === 'constructor') {
-				html += `<td>${d1.constructors[0]?.name || ''}</td>`;
-			} else if (stat.driver) {
-				html += `<td>${d1.driver[stat.key]}</td>`;
-			} else {
-				html += `<td>${d1[stat.key]}</td>`;
-			}
-		}
-		if (d2) {
-			if (stat.key === 'constructor') {
-				html += `<td>${d2.constructors[0]?.name || ''}</td>`;
-			} else if (stat.driver) {
-				html += `<td>${d2.driver[stat.key]}</td>`;
-			} else {
-				html += `<td>${d2[stat.key]}</td>`;
-			}
-		}
-		html += '</tr>';
-	});
+  function driverCard(driver) {
+    if (!driver) return '';
+    const imgSrc = `images/${driver.driverId.toLowerCase()}.avif`;
+    // Get gradient for teamId
+    const grad = teamGradients[driver.teamId] || ['#ccc', '#eee'];
+    const gradStyle = `background: linear-gradient(-60deg, ${grad[0]}, ${grad[1]});`;
+    // Special case for Kimi Antonelli
+    let displayName = driver.driver.name;
+    let displaySurname = driver.driver.surname;
+    if (driver.driverId === 'antonelli') {
+      displayName = 'Kimi';
+      displaySurname = 'Antonelli';
+    }
+    return `
+      <div class="driver-card card-overlay-container">
+        <img src="${imgSrc}" alt="${displayName} ${displaySurname}" class="driver-img-overlay" onerror="this.style.display='none'">
+        <div class="driver-card-content" style="${gradStyle}">
+          <p class="team-name">${driver.team.teamName}</p>
+          <p class="driver-name">${displayName}</p>
+          <p class="driver-surname">${displaySurname}</p>
+          <p class="driver-number">${driver.driver.number}</p>
+          <p class="driver-nationality">${driver.driver.nationality}</p>
+          <p class="driver-birthday">${driver.driver.birthday}</p>
+          <p class="season-standings">CURRENT<br>STANDINGS</p>
+          <p class="driver-position">${driver.position}</p>
+          <p class="subheading">PLACE</p>
+          <p class="driver-points">${driver.points}</p>
+          <p class="subheading">POINTS</p>
+          <p class="driver-wins">${driver.wins}</p>
+          <p class="subheading">WINS</p>
+        </div>
+      </div>
+    `;
+  }
 
-	html += '</tbody></table></div>';
-	comparisonDiv.innerHTML = html;
+  let html = '<div style="display: flex; justify-content: center; gap: 35px;">';
+  html += `<div>${d1 ? driverCard(d1) : '<div class="driver-card"></div>'}</div>`;
+  html += `<div>${d2 ? driverCard(d2) : '<div class="driver-card"></div>'}</div>`;
+  html += '</div>';
+  comparisonDiv.innerHTML = html;
 }
 
 driver1Select.addEventListener('change', showComparison);

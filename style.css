@@ -1,6 +1,40 @@
+.card-overlay-container {
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	min-height: 200px;
+	margin-bottom: 20px;
+	overflow: hidden;
+}
+
+.driver-img-overlay {
+	position: absolute;
+	padding-left: 5%;
+	top: 3%;
+	height: 160%;
+	width: auto;
+	background: none;
+	box-shadow: none;
+}
+
+.driver-card-content {
+	border-radius: 10px;
+	padding: 12px 25px 12px 52px;
+	min-width: 260px;
+	max-width: 340px;
+	margin-left: 60px;
+	margin-right: 50px;
+	text-align: right;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+.driver-card {
+	text-align: right;
+}
 body {
-	font-family: Arial, sans-serif;
-	background: #f7f7f7;
+	font-family: "Inter", sans-serif;
+	background: black;
 	margin: 0;
 	padding: 0;
 }
@@ -12,49 +46,153 @@ h1 {
 
 .selectors {
 	display: flex;
-	justify-content: center;
-	gap: 80px;
-	margin: 30px 0 20px 0;
+	justify-content: space-between;
+	align-items: flex-start;
+	max-width: 900px;
+	margin: 40px auto 20px auto;
+	gap: 40px;
 }
 
-.selectors div {
-	background: #fff;
-	padding: 20px 30px;
-	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+.selectors > div {
+	flex: 1 1 0;
+	background: linear-gradient(120deg, #202020, #0d0d0d);
+	padding: 18px 26px;
+	border-radius: 6px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+	min-width: 250px;
+	max-width: 400px;
+	margin: 0 10px;
+	color: #fff;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-family: 'Zen Dots', cursive;
 }
 
 select {
-	width: 180px;
-	padding: 6px 10px;
+	width: 100%;
+	padding: 8px 10px;
 	font-size: 1rem;
 	border-radius: 4px;
 	border: 1px solid #ccc;
-	margin-top: 6px;
+	margin-top: 8px;
 }
 
-.comparison {
-	display: flex;
-	justify-content: center;
-	margin-top: 30px;
+p {
+	margin: 7px 0;
 }
 
-.comparison-table table {
-	border-collapse: collapse;
-	background: #fff;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-	border-radius: 8px;
-	overflow: hidden;
-}
-.comparison-table th, .comparison-table td {
-	padding: 12px 20px;
-	border-bottom: 1px solid #eee;
-	text-align: center;
-}
-.comparison-table th {
-	background: #f0f0f0;
+.team-name {
+	color: #fff;
 	font-weight: bold;
+	font-style: italic;
+	font-size: 0.9rem;
+	margin-bottom: 10px;
+	text-transform: uppercase;
 }
-.comparison-table tr:last-child td {
-	border-bottom: none;
+
+.driver-name {
+	color: #fff;
+	font-size: 1.2rem;
+	font-weight: 150;
+	margin: 0;
+	letter-spacing: -0.5px;
+}
+
+.driver-surname {
+	color: #fff;
+	font-size: 1.25rem;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin-top: 0;
+	margin-bottom: 0;
+	font-family: 'Zen Dots', cursive;
+}
+
+.driver-number {
+	color: #fff;
+	font-size: 1.3rem;
+	font-weight: bold;
+	margin: 0;
+	margin-bottom: 2px;
+	font-style: italic;
+	font-family: 'Zen Dots', cursive;
+}
+
+.driver-nationality {
+	color: #fff;
+	font-size: 0.9rem;
+	margin-bottom: 0;
+	margin-top: 5px;
+	font-weight: 400;
+	text-transform: uppercase;
+}
+
+.driver-birthday {
+	color: #fff;
+	font-size: 0.9rem;
+	margin: 0;
+	font-weight: 200;
+}
+
+.season-standings {
+	color: #fff;
+	font-size: 0.9rem;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	font-weight: 550;
+	letter-spacing: 1.5px;
+}
+
+.driver-position, .driver-points, .driver-wins {
+	color: #fff;
+	font-size: 1.85rem;
+	margin: 0;
+	font-weight: bold;
+	font-family: 'Zen Dots', cursive;
+}
+
+.subheading {
+	color: #fff;
+	font-size: 1rem;
+	font-weight: 200;
+	margin-top: 1px;
+	margin-bottom: 20px;
+}
+
+.title {
+	color: #fff;
+	text-align: center;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	font-weight: 800;
+	font-size: 3rem;
+	font-family: 'Zen Dots', cursive;
+}
+
+/* https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select */
+select, 
+::picker(select) {
+  appearance: base-select;
+  font-family: Inter, sans-serif;
+  font-weight: 300;
+  line-height: 2.2rem;
+}
+
+optgroup {
+  font-weight: 450;
+}
+
+select::picker-icon {
+  color: #ffffff;
+  transition: 0.5s rotate;
+  font-style: normal !important;
+}
+
+select:open::picker-icon {
+  rotate: 180deg;
+}
+
+option
+::focus {
+	transition: 0.5s ease-in-out background-color #333;
 }
