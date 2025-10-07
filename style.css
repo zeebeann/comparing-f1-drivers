@@ -196,3 +196,21 @@ option
 ::focus {
 	transition: 0.5s ease-in-out background-color #333;
 }
+
+footer {
+	text-align: center;
+	color: #fff;
+	margin-bottom: 20px;
+	font-size: 0.7rem;
+	font-family: Inter, sans-serif;
+	margin-top: 25px;
+}
+
+a {
+	color: #ff1e1e;
+	text-decoration: none;
+}
+
+.red-title {
+	color: #c20000; 
+}
