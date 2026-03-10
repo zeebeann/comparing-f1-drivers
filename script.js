@@ -38,9 +38,11 @@ function showComparison() {
     haas: ['#4E5052', '#9D9FA2'],
     rb: ['#2345AB', '#6D98FF'],
     aston_martin: ['#00482C', '#239971'],
-    sauber: ['#016400', '#08C00E'],
+    audi: ['#a50000', '#1c1c1c'],
     mclaren: ['#873500', '#F47600'],
-    red_bull: ['#003282', '#4781D7']
+    red_bull: ['#003282', '#4781D7'],
+    // new team for current season
+    cadillac: ['#000000', '#666666']
   };
 
   function driverCard(driver) {
